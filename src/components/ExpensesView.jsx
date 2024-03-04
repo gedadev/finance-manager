@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ListItem from "./ListItem";
 import axios from "axios";
+import "../styles/expenses.css";
 
 function ExpensesView() {
   const [expenses, setExpenses] = useState([]);
