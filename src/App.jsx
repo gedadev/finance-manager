@@ -1,5 +1,12 @@
+import "./styles/App.css";
+import ExpensesView from "./components/ExpensesView";
+
 function App() {
-  return <></>;
+  return (
+    <>
+      <ExpensesView />
+    </>
+  );
 }
 
 export default App;
