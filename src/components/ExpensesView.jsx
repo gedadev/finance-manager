@@ -1,7 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ListItem from "./ListItem";
+import axios from "axios";
 
 function ExpensesView() {
   const [expenses, setExpenses] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/get-expenses");
+        setExpenses(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getData();
+  }, []);
 
   return (
     <section id="expenses" className="expenses-view">
