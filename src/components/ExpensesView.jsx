@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import ListItem from "./ListItem";
 import axios from "axios";
 import "../styles/expenses.css";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import FilterListOffIcon from "@mui/icons-material/FilterListOff";
+import FilterOptions from "./FilterOptions";
 
 function ExpensesView() {
   const [expenses, setExpenses] = useState([]);
+  const [activeFilters, setActiveFilters] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -22,15 +26,20 @@ function ExpensesView() {
     getData();
   }, []);
 
+  const toggleFilters = () => {
+    setActiveFilters(!activeFilters);
+  };
+
   return (
     <section id="expenses" className="expenses-view">
-      <div className="filters-container">
-        <ul className="view-filters">
-          <li>Filter by:</li>
-          <li>Date</li>
-          <li>Category</li>
-          <li>Subcategory</li>
-        </ul>
+      <div className="filters-selector">
+        <span>
+          Filters:
+          <FilterListIcon className="filter-btn" onClick={toggleFilters} />
+        </span>
+        <span>
+          | <FilterListOffIcon className="filter-btn" />
+        </span>
       </div>
       <div className="table-container">
         <ul className="view-table">
@@ -51,6 +60,7 @@ function ExpensesView() {
           ))}
         </ul>
       </div>
+      {activeFilters && <FilterOptions toggleFilters={toggleFilters} />}
     </section>
   );
 }
