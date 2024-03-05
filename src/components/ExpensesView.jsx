@@ -10,7 +10,11 @@ function ExpensesView() {
     const getData = async () => {
       try {
         const response = await axios.get("http://localhost:3000/get-expenses");
-        setExpenses(response.data);
+        const data = response.data.map((obj) => ({
+          ...obj,
+          date: new Date(obj.date * 1000).toLocaleDateString(),
+        }));
+        setExpenses(data);
       } catch (error) {
         console.log(error);
       }
