@@ -13,6 +13,7 @@
 
 :root {
     --bg-color: #8CB9BD;
+    --bg-color-transparent: rgba(140, 185, 189, 0.6);
     --light-color: #FEFBF6;
     --dark-color: #473C33;
     --highlight-color: #ECB159;
@@ -23,4 +24,19 @@ body {
     background: var(--bg-color);
     color: var(--dark-color);
     font-family: "Poppins", sans-serif;
+}
+
+.button {
+    width: 6rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background: var(--dark-color);
+    color: var(--light-color);
+    transition: all 0.2s ease;
+}
+
+.button:hover {
+    background: var(--highlight-color);
+    box-shadow: 0 0 10px var(--accent-color);
 }

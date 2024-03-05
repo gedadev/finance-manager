@@ -1,0 +1,43 @@
+.filters-modal {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--bg-color-transparent);
+    z-index: 1;
+}
+
+.filters-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--bg-color);
+    box-shadow: -1px 0 20px var(--accent-color);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 0;
+}
+
+.filter-option {
+    margin: 1rem auto;
+    width: 80%;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.filter-option > input, select {
+    flex-grow: 1;
+    border-radius: 0.4rem;
+    padding: 0.4rem;
+    background: var(--light-color);
+    font-size: 0.8rem;
+}
+
+.filters-container .button {
+    align-self: center;
+    margin: 1rem 0;
+}
