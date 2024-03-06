@@ -9,6 +9,7 @@ import FilterOptions from "./FilterOptions";
 function ExpensesView() {
   const [expenses, setExpenses] = useState([]);
   const [activeFilters, setActiveFilters] = useState(false);
+  const [filters, setFilters] = useState({});
 
   useEffect(() => {
     const getData = async () => {
@@ -28,6 +29,23 @@ function ExpensesView() {
 
   const toggleFilters = () => {
     setActiveFilters(!activeFilters);
+  };
+
+  const addFilter = (e) => {
+    const { name, value } = e.target;
+
+    if (value) {
+      setFilters({
+        ...filters,
+        [e.target.name]: e.target.value,
+      });
+    } else {
+      if (Object.prototype.hasOwnProperty.call(filters, name)) {
+        const update = { ...filters };
+        delete update[name];
+        setFilters(update);
+      }
+    }
   };
 
   return (
@@ -60,7 +78,9 @@ function ExpensesView() {
           ))}
         </ul>
       </div>
-      {activeFilters && <FilterOptions toggleFilters={toggleFilters} />}
+      {activeFilters && (
+        <FilterOptions toggleFilters={toggleFilters} addFilter={addFilter} />
+      )}
     </section>
   );
 }
