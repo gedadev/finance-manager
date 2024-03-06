@@ -1,7 +1,27 @@
+import { useEffect, useState } from "react";
 import "../styles/filters.css";
 import PropTypes from "prop-types";
+import axios from "axios";
 
 function FilterOptions({ toggleFilters }) {
+  const [filters, setFilters] = useState({});
+
+  useEffect(() => {
+    const getFilters = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/get-filters");
+        const data = {
+          ...response.data,
+          payMethod: response.data.payMethod.map((item) => item.name),
+        };
+        setFilters(data);
+      } catch (error) {
+        console.log(`Connection error, ${error}`);
+      }
+    };
+    getFilters();
+  }, []);
+
   return (
     <div className="filters-modal">
       <div className="filters-container">
