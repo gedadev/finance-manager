@@ -41,3 +41,8 @@
     align-self: center;
     margin: 1rem 0;
 }
+
+.option-item {
+    display: flex;
+    gap: 0.5rem;
+}

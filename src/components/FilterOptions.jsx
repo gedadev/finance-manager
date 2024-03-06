@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import "../styles/filters.css";
 import PropTypes from "prop-types";
 import axios from "axios";
+import OptionsSelector from "./OptionsSelector";
 
 function FilterOptions({ toggleFilters }) {
-  const [filters, setFilters] = useState({});
+  const [filtersOptions, setFiltersOptions] = useState({});
 
   useEffect(() => {
     const getFilters = async () => {
@@ -14,7 +15,7 @@ function FilterOptions({ toggleFilters }) {
           ...response.data,
           payMethod: response.data.payMethod.map((item) => item.name),
         };
-        setFilters(data);
+        setFiltersOptions(data);
       } catch (error) {
         console.log(`Connection error, ${error}`);
       }
@@ -34,20 +35,30 @@ function FilterOptions({ toggleFilters }) {
           <input type="date" name="end-date" id="end-date" />
         </div>
         <div className="filter-option">
-          <label htmlFor="category">Category:</label>
-          <select name="category" id="category">
-            <option value="basic">Basic</option>
-            <option value="other">Other</option>
-            <option value="msi">MSI</option>
+          <label htmlFor="recurrent">Recurrent:</label>
+          <select name="recurrent" id="recurrent">
+            <option value="">None...</option>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
           </select>
         </div>
         <div className="filter-option">
-          <label htmlFor="store">Store:</label>
-          <select name="store" id="store">
-            <option value="basic">Walmart</option>
-            <option value="other">Amazon</option>
-            <option value="msi">Apple</option>
-          </select>
+          <fieldset>
+            <legend>Pay method:</legend>
+            <OptionsSelector optionsArray={filtersOptions.payMethod} />
+          </fieldset>
+        </div>
+        <div className="filter-option">
+          <fieldset>
+            <legend>Category:</legend>
+            <OptionsSelector optionsArray={filtersOptions.category} />
+          </fieldset>
+        </div>
+        <div className="filter-option">
+          <fieldset>
+            <legend>Subcategory:</legend>
+            <OptionsSelector optionsArray={filtersOptions.subcategory} />
+          </fieldset>
         </div>
         <button onClick={toggleFilters} className="button">
           Done
