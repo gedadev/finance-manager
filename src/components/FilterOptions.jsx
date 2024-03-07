@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import OptionsSelector from "./OptionsSelector";
 
-function FilterOptions({ toggleFilters }) {
+function FilterOptions({ toggleFilters, addFilter }) {
   const [filtersOptions, setFiltersOptions] = useState({});
 
   useEffect(() => {
@@ -23,39 +23,66 @@ function FilterOptions({ toggleFilters }) {
     getFilters();
   }, []);
 
+  const handleFieldset = (e) => {
+    const fieldset = e.target.closest("fieldset");
+    const options = fieldset.querySelectorAll('input[type="checkbox"]');
+    const selectedOptions = [...options].filter((option) => option.checked);
+    const filterValues = {
+      target: {
+        name: fieldset.name,
+        value:
+          selectedOptions.length > 0
+            ? selectedOptions.map((option) => option.name)
+            : "",
+      },
+    };
+
+    addFilter(filterValues);
+  };
+
   return (
     <div className="filters-modal">
       <div className="filters-container">
         <div className="filter-option">
           <label htmlFor="init-date">From:</label>
-          <input type="date" name="init-date" id="init-date" />
+          <input
+            type="date"
+            name="init-date"
+            id="init-date"
+            onChange={addFilter}
+          />
         </div>
         <div className="filter-option">
           <label htmlFor="end-date">To:</label>
-          <input type="date" name="end-date" id="end-date" />
+          <input
+            type="date"
+            name="end-date"
+            id="end-date"
+            onChange={addFilter}
+          />
         </div>
         <div className="filter-option">
           <label htmlFor="recurrent">Recurrent:</label>
-          <select name="recurrent" id="recurrent">
+          <select name="recurrent" id="recurrent" onChange={addFilter}>
             <option value="">None...</option>
             <option value="no">No</option>
             <option value="yes">Yes</option>
           </select>
         </div>
         <div className="filter-option">
-          <fieldset>
+          <fieldset name="payMethod" onChange={handleFieldset}>
             <legend>Pay method:</legend>
             <OptionsSelector optionsArray={filtersOptions.payMethod} />
           </fieldset>
         </div>
         <div className="filter-option">
-          <fieldset>
+          <fieldset name="category" onChange={handleFieldset}>
             <legend>Category:</legend>
             <OptionsSelector optionsArray={filtersOptions.category} />
           </fieldset>
         </div>
         <div className="filter-option">
-          <fieldset>
+          <fieldset name="subcategory" onChange={handleFieldset}>
             <legend>Subcategory:</legend>
             <OptionsSelector optionsArray={filtersOptions.subcategory} />
           </fieldset>
@@ -70,6 +97,7 @@ function FilterOptions({ toggleFilters }) {
 
 FilterOptions.propTypes = {
   toggleFilters: PropTypes.func,
+  addFilter: PropTypes.func,
 };
 
 export default FilterOptions;
