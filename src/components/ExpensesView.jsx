@@ -95,7 +95,11 @@ function ExpensesView() {
         </ul>
       </div>
       {activeFilters && (
-        <FilterOptions toggleFilters={toggleFilters} addFilter={addFilter} />
+        <FilterOptions
+          toggleFilters={toggleFilters}
+          addFilter={addFilter}
+          filters={{ ...filters }}
+        />
       )}
     </section>
   );
