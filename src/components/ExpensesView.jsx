@@ -10,6 +10,7 @@ function ExpensesView() {
   const [expenses, setExpenses] = useState([]);
   const [activeFilters, setActiveFilters] = useState(false);
   const [filters, setFilters] = useState({});
+  const [filteredExpenses, setFilteredExpenses] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -26,6 +27,19 @@ function ExpensesView() {
     };
     getData();
   }, []);
+
+  useEffect(() => {
+    const update = expenses.filter((item) =>
+      Object.entries(filters).reduce((accumulator, [key, value]) => {
+        if (Array.isArray(value)) {
+          return value.includes(item[key].toLowerCase()) && accumulator;
+        } else {
+          return value === item[key].toLowerCase() && accumulator;
+        }
+      }, true)
+    );
+    setFilteredExpenses(update);
+  }, [expenses, filters]);
 
   const toggleFilters = () => {
     setActiveFilters(!activeFilters);
@@ -73,9 +87,11 @@ function ExpensesView() {
               <li>Price</li>
             </ul>
           </li>
-          {expenses.map((item) => (
-            <ListItem key={item._id} item={item} />
-          ))}
+          {Object.entries(filters).length === 0
+            ? expenses.map((item) => <ListItem key={item._id} item={item} />)
+            : filteredExpenses.map((item) => (
+                <ListItem key={item._id} item={item} />
+              ))}
         </ul>
       </div>
       {activeFilters && (
