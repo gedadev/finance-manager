@@ -30,7 +30,7 @@ function OptionsSelector({ optionsArray, filterName, filters }) {
 OptionsSelector.propTypes = {
   optionsArray: PropTypes.array,
   filterName: PropTypes.string,
-  filters: PropTypes.array,
+  filters: PropTypes.object,
 };
 
 export default OptionsSelector;
