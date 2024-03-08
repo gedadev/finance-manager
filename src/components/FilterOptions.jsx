@@ -53,7 +53,12 @@ function FilterOptions({ toggleFilters, addFilter, filters }) {
         </div>
         <div className="filter-option">
           <label htmlFor="recurrent">Recurrent:</label>
-          <select name="recurrent" id="recurrent" onChange={addFilter}>
+          <select
+            name="recurrent"
+            value={filters.recurrent}
+            id="recurrent"
+            onChange={addFilter}
+          >
             <option value="">None...</option>
             <option value="no">No</option>
             <option value="yes">Yes</option>
@@ -100,7 +105,7 @@ function FilterOptions({ toggleFilters, addFilter, filters }) {
 FilterOptions.propTypes = {
   toggleFilters: PropTypes.func,
   addFilter: PropTypes.func,
-  filters: PropTypes.array,
+  filters: PropTypes.object,
 };
 
 export default FilterOptions;
