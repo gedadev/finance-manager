@@ -11,6 +11,10 @@ function ExpensesView() {
   const [activeFilters, setActiveFilters] = useState(false);
   const [filters, setFilters] = useState({});
   const [filteredExpenses, setFilteredExpenses] = useState([]);
+  const [dateRange, setDateRange] = useState({
+    initDate: Date.now() - 86400000 * 35,
+    endDate: Date.now(),
+  });
 
   useEffect(() => {
     const getData = async () => {
@@ -49,10 +53,7 @@ function ExpensesView() {
     const { name, value } = e.target;
 
     if (value) {
-      setFilters({
-        ...filters,
-        [e.target.name]: e.target.value,
-      });
+      setFilters({ ...filters, [name]: value });
     } else {
       if (Object.prototype.hasOwnProperty.call(filters, name)) {
         const update = { ...filters };
@@ -60,6 +61,25 @@ function ExpensesView() {
         setFilters(update);
       }
     }
+  };
+
+  const handleDates = (e) => {
+    const { name, value } = e.target;
+
+    if (value) {
+      setDateRange({ ...dateRange, [name]: convertToTimestamp(value) });
+    } else {
+      setDateRange({
+        initDate: Date.now() - 86400000 * 35,
+        endDate: Date.now(),
+      });
+    }
+  };
+
+  const convertToTimestamp = (dateString) => {
+    const [year, month, day] = dateString.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.getTime();
   };
 
   return (
@@ -99,6 +119,8 @@ function ExpensesView() {
           toggleFilters={toggleFilters}
           addFilter={addFilter}
           filters={{ ...filters }}
+          handleDates={handleDates}
+          dateRange={{ ...dateRange }}
         />
       )}
     </section>
