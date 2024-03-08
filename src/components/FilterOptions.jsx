@@ -4,7 +4,13 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import OptionsSelector from "./OptionsSelector";
 
-function FilterOptions({ toggleFilters, addFilter, filters }) {
+function FilterOptions({
+  toggleFilters,
+  addFilter,
+  filters,
+  handleDates,
+  dateRange,
+}) {
   const [filtersOptions, setFiltersOptions] = useState({});
 
   useEffect(() => {
@@ -40,16 +46,37 @@ function FilterOptions({ toggleFilters, addFilter, filters }) {
     addFilter(filterValues);
   };
 
+  const convertToDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month =
+      date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <div className="filters-modal">
       <div className="filters-container">
         <div className="filter-option">
           <label htmlFor="init-date">From:</label>
-          <input type="date" name="init-date" id="init-date" />
+          <input
+            type="date"
+            name="initDate"
+            id="init-date"
+            value={convertToDate(dateRange.initDate)}
+            onChange={handleDates}
+          />
         </div>
         <div className="filter-option">
           <label htmlFor="end-date">To:</label>
-          <input type="date" name="end-date" id="end-date" />
+          <input
+            type="date"
+            name="endDate"
+            id="end-date"
+            value={convertToDate(dateRange.endDate)}
+            onChange={handleDates}
+          />
         </div>
         <div className="filter-option">
           <label htmlFor="recurrent">Recurrent:</label>
@@ -106,6 +133,8 @@ FilterOptions.propTypes = {
   toggleFilters: PropTypes.func,
   addFilter: PropTypes.func,
   filters: PropTypes.object,
+  handleDates: PropTypes.func,
+  dateRange: PropTypes.object,
 };
 
 export default FilterOptions;
