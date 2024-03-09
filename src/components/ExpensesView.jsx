@@ -5,6 +5,8 @@ import "../styles/expenses.css";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import FilterOptions from "./FilterOptions";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ExpensesView() {
   const [expenses, setExpenses] = useState([]);
@@ -17,6 +19,14 @@ function ExpensesView() {
   });
 
   useEffect(() => {
+    if (dateRange.initDate > dateRange.endDate) {
+      [dateRange.initDate, dateRange.endDate] = [
+        dateRange.endDate,
+        dateRange.initDate,
+      ];
+      warnInvalidDate();
+    }
+
     const getData = async () => {
       try {
         const response = await axios.get(
@@ -84,6 +94,12 @@ function ExpensesView() {
     return date.getTime();
   };
 
+  const warnInvalidDate = () =>
+    toast.warn("Invalid range, dates swapped", {
+      position: "bottom-right",
+      autoClose: 3000,
+    });
+
   return (
     <section id="expenses" className="expenses-view">
       <div className="filters-selector">
@@ -125,6 +141,7 @@ function ExpensesView() {
           dateRange={{ ...dateRange }}
         />
       )}
+      <ToastContainer />
     </section>
   );
 }
