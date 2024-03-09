@@ -19,10 +19,12 @@ function ExpensesView() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/get-expenses");
+        const response = await axios.get(
+          `http://localhost:3000/get-expenses?initDate=${dateRange.initDate}&endDate=${dateRange.endDate}`
+        );
         const data = response.data.map((obj) => ({
           ...obj,
-          date: new Date(obj.date * 1000).toLocaleDateString(),
+          date: new Date(obj.date).toLocaleDateString(),
         }));
         setExpenses(data);
       } catch (error) {
@@ -30,7 +32,7 @@ function ExpensesView() {
       }
     };
     getData();
-  }, []);
+  }, [dateRange]);
 
   useEffect(() => {
     const update = expenses.filter((item) =>
