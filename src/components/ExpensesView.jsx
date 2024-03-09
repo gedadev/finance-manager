@@ -107,9 +107,15 @@ function ExpensesView() {
           Filters:
           <FilterListIcon className="filter-btn" onClick={toggleFilters} />
         </span>
-        <span>
-          | <FilterListOffIcon className="filter-btn" />
-        </span>
+        {Object.entries(filters).length > 0 && (
+          <span>
+            |{" "}
+            <FilterListOffIcon
+              className="filter-btn"
+              onClick={() => setFilters({})}
+            />
+          </span>
+        )}
       </div>
       <div className="table-container">
         <ul className="view-table">
