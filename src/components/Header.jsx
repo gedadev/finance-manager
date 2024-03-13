@@ -12,7 +12,7 @@ function Header() {
         New Entry
       </button>
       <div></div>
-      {activeModal && <EntryModal />}
+      {activeModal && <EntryModal toggleModal={toggleModal} />}
     </header>
   );
 }

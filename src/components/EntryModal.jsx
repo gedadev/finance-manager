@@ -1,6 +1,7 @@
 import "../styles/modal.css";
+import propTypes from "prop-types";
 
-function EntryModal() {
+function EntryModal({ toggleModal }) {
   return (
     <div className="entry-modal">
       <form action="" className="entry-form">
@@ -55,7 +56,7 @@ function EntryModal() {
           <button type="submit" className="button">
             Add Entry
           </button>
-          <button type="submit" className="button">
+          <button type="submit" className="button" onClick={toggleModal}>
             Discard
           </button>
         </div>
@@ -63,5 +64,9 @@ function EntryModal() {
     </div>
   );
 }
+
+EntryModal.propTypes = {
+  toggleModal: propTypes.func,
+};
 
 export default EntryModal;
