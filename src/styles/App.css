@@ -27,7 +27,6 @@ body {
 }
 
 input, select {
-    flex-grow: 1;
     border-radius: 0.4rem;
     padding: 0.4rem;
     background: var(--light-color);

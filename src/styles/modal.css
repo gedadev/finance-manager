@@ -1,0 +1,35 @@
+.entry-modal {
+    background: var(--bg-color-transparent);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.entry-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    background: var(--bg-color);
+    width: min(500px, 100%);
+    padding: 2rem;
+    border-radius: 0.6rem;
+    box-shadow: 1px 1px 20px var(--accent-color);
+}
+
+.input-container {
+    display: grid;
+    grid-template-columns: 100px 200px;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 5rem;
+}
