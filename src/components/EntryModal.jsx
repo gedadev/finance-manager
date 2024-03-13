@@ -1,7 +1,28 @@
 import "../styles/modal.css";
 import propTypes from "prop-types";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import InputSelect from "./InputSelect";
 
 function EntryModal({ toggleModal }) {
+  const [inputOptions, setInputOptions] = useState({});
+
+  useEffect(() => {
+    const getFilters = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/get-filters");
+        const data = {
+          ...response.data,
+          payMethod: response.data.payMethod.map((item) => item.name),
+        };
+        setInputOptions(data);
+      } catch (error) {
+        console.log(`Connection error, ${error}`);
+      }
+    };
+    getFilters();
+  }, []);
+
   return (
     <div className="entry-modal">
       <form action="" className="entry-form">
@@ -12,25 +33,19 @@ function EntryModal({ toggleModal }) {
         <div className="input-container">
           <label htmlFor="">Pay Method:</label>
           <select name="">
-            <option value="">Select...</option>
-            <option value="cash">Cash</option>
-            <option value="creditCard">Credit Card</option>
+            <InputSelect inputOptions={inputOptions.payMethod} />
           </select>
         </div>
         <div className="input-container">
           <label htmlFor="">Category:</label>
           <select name="">
-            <option value="">Select...</option>
-            <option value="cash">Basic</option>
-            <option value="creditCard">Other</option>
+            <InputSelect inputOptions={inputOptions.category} />
           </select>
         </div>
         <div className="input-container">
           <label htmlFor="">Subcategory:</label>
           <select name="">
-            <option value="">Select...</option>
-            <option value="groceries">Groceries</option>
-            <option value="services">Services</option>
+            <InputSelect inputOptions={inputOptions.subcategory} />
           </select>
         </div>
         <div className="input-container">
