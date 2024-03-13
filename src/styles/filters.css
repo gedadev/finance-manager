@@ -29,14 +29,6 @@
     align-items: center;
 }
 
-.filter-option > input, select {
-    flex-grow: 1;
-    border-radius: 0.4rem;
-    padding: 0.4rem;
-    background: var(--light-color);
-    font-size: 0.8rem;
-}
-
 .filters-container .button {
     align-self: center;
     margin: 1rem 0;
