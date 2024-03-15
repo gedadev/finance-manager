@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../styles/filters.css";
 import PropTypes from "prop-types";
-import axios from "axios";
 import OptionsSelector from "./OptionsSelector";
+import { UserContext } from "../ContextProvider";
 
 function FilterOptions({
   toggleFilters,
@@ -11,23 +11,10 @@ function FilterOptions({
   handleDates,
   dateRange,
 }) {
+  const { userOptions } = useContext(UserContext);
   const [filtersOptions, setFiltersOptions] = useState({});
 
-  useEffect(() => {
-    const getFilters = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/get-filters");
-        const data = {
-          ...response.data,
-          payMethod: response.data.payMethod.map((item) => item.name),
-        };
-        setFiltersOptions(data);
-      } catch (error) {
-        console.log(`Connection error, ${error}`);
-      }
-    };
-    getFilters();
-  }, []);
+  useEffect(() => setFiltersOptions(userOptions), [userOptions]);
 
   const handleFieldset = (e) => {
     const fieldset = e.target.closest("fieldset");

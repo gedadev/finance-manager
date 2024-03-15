@@ -1,27 +1,13 @@
 import "../styles/modal.css";
 import propTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import InputSelect from "./InputSelect";
+import { UserContext } from "../ContextProvider";
 
 function EntryModal({ toggleModal, toast }) {
-  // move this function to context as is shared with FilterOptions
-  const convertToDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const month =
-      date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-    return `${year}-${month}-${day}`;
-  };
-
-  // move function to context, is shared with ExpensesView
-  const convertToTimestamp = (dateString) => {
-    const [year, month, day] = dateString.split("-").map(Number);
-    const date = new Date(year, month - 1, day);
-    return date.getTime();
-  };
-
+  const { convertToDate, convertToTimestamp, userOptions } =
+    useContext(UserContext);
   const [inputOptions, setInputOptions] = useState({});
   const [formData, setFormData] = useState({
     date: convertToDate(Date.now()),
@@ -31,25 +17,11 @@ function EntryModal({ toggleModal, toast }) {
     recurrent: "no",
     store: "",
     item: "",
-    price: null,
+    price: "",
   });
   const [submitDisabled, setSubmitDisabled] = useState(true);
 
-  useEffect(() => {
-    const getFilters = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/get-filters");
-        const data = {
-          ...response.data,
-          payMethod: response.data.payMethod.map((item) => item.name),
-        };
-        setInputOptions(data);
-      } catch (error) {
-        console.log(`Connection error, ${error}`);
-      }
-    };
-    getFilters();
-  }, []);
+  useEffect(() => setInputOptions(userOptions), [userOptions]);
 
   useEffect(() => {
     const filledForm = Object.values(formData).reduce(
@@ -83,6 +55,7 @@ function EntryModal({ toggleModal, toast }) {
         "http://localhost:3000/add-entry",
         data
       );
+      // toast is executing when the component umount, so its undefined
       toast.success(response.data, {
         position: "bottom-right",
         autoClose: 3000,
@@ -98,7 +71,6 @@ function EntryModal({ toggleModal, toast }) {
 
   return (
     <div className="entry-modal">
-      {console.log(typeof formData.price)}
       <form action="" className="entry-form" onSubmit={handleSubmit}>
         <div className="input-container">
           <label htmlFor="">Date:</label>
