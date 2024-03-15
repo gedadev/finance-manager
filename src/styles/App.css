@@ -59,3 +59,13 @@ header {
     background: var(--highlight-color);
     box-shadow: 0 0 10px var(--accent-color);
 }
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: auto;
+}
+
+.button:disabled:hover {
+    background: var(--dark-color);
+    box-shadow: none;
+}

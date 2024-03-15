@@ -31,8 +31,9 @@ function EntryModal({ toggleModal, toast }) {
     recurrent: "no",
     store: "",
     item: "",
-    price: "",
+    price: null,
   });
+  const [submitDisabled, setSubmitDisabled] = useState(true);
 
   useEffect(() => {
     const getFilters = async () => {
@@ -49,6 +50,19 @@ function EntryModal({ toggleModal, toast }) {
     };
     getFilters();
   }, []);
+
+  useEffect(() => {
+    const filledForm = Object.values(formData).reduce(
+      (acc, value) => String(value).trim() !== "" && acc,
+      true
+    );
+
+    if (filledForm) {
+      setSubmitDisabled(false);
+    } else {
+      setSubmitDisabled(true);
+    }
+  }, [formData]);
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -151,7 +165,7 @@ function EntryModal({ toggleModal, toast }) {
           />
         </div>
         <div className="form-buttons">
-          <button type="submit" className="button">
+          <button type="submit" className="button" disabled={submitDisabled}>
             Add Entry
           </button>
           <button type="button" className="button" onClick={toggleModal}>
