@@ -1,5 +1,7 @@
 import { useState } from "react";
 import EntryModal from "./EntryModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Header() {
   const [activeModal, setActiveModal] = useState(false);
@@ -12,7 +14,8 @@ function Header() {
         New Entry
       </button>
       <div></div>
-      {activeModal && <EntryModal toggleModal={toggleModal} />}
+      {activeModal && <EntryModal toggleModal={toggleModal} toast={toast} />}
+      <ToastContainer />
     </header>
   );
 }

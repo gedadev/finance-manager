@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import InputSelect from "./InputSelect";
 
-function EntryModal({ toggleModal }) {
+function EntryModal({ toggleModal, toast }) {
   // move this function to context as is shared with FilterOptions
   const convertToDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -13,6 +13,13 @@ function EntryModal({ toggleModal }) {
       date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
     const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
     return `${year}-${month}-${day}`;
+  };
+
+  // move function to context, is shared with ExpensesView
+  const convertToTimestamp = (dateString) => {
+    const [year, month, day] = dateString.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.getTime();
   };
 
   const [inputOptions, setInputOptions] = useState({});
@@ -49,9 +56,26 @@ function EntryModal({ toggleModal }) {
     setFormData(update);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e.target);
+    const data = { ...formData, date: convertToTimestamp(formData.date) };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/add-entry",
+        data
+      );
+      toast.success(response.data, {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      toggleModal();
+    } catch (error) {
+      toast.error("Error adding entry", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
@@ -141,6 +165,7 @@ function EntryModal({ toggleModal }) {
 
 EntryModal.propTypes = {
   toggleModal: propTypes.func,
+  toast: propTypes.func,
 };
 
 export default EntryModal;
