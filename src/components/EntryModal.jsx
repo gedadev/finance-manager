@@ -72,7 +72,11 @@ function EntryModal({ toggleModal, toast }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = { ...formData, date: convertToTimestamp(formData.date) };
+    const data = {
+      ...formData,
+      date: convertToTimestamp(formData.date),
+      price: Number(formData.price),
+    };
 
     try {
       const response = await axios.post(
@@ -94,6 +98,7 @@ function EntryModal({ toggleModal, toast }) {
 
   return (
     <div className="entry-modal">
+      {console.log(typeof formData.price)}
       <form action="" className="entry-form" onSubmit={handleSubmit}>
         <div className="input-container">
           <label htmlFor="">Date:</label>
