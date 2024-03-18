@@ -1,11 +1,10 @@
 import "../styles/modal.css";
 import propTypes from "prop-types";
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
 import InputSelect from "./InputSelect";
 import { UserContext } from "../ContextProvider";
 
-function EntryModal({ toggleModal, toast }) {
+function EntryModal({ toggleModal, submitData }) {
   const { convertToDate, convertToTimestamp, userOptions } =
     useContext(UserContext);
   const [inputOptions, setInputOptions] = useState({});
@@ -42,7 +41,7 @@ function EntryModal({ toggleModal, toast }) {
     setFormData(update);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const data = {
       ...formData,
@@ -50,23 +49,8 @@ function EntryModal({ toggleModal, toast }) {
       price: Number(formData.price),
     };
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/add-entry",
-        data
-      );
-      // toast is executing when the component umount, so its undefined
-      toast.success(response.data, {
-        position: "bottom-right",
-        autoClose: 3000,
-      });
-      toggleModal();
-    } catch (error) {
-      toast.error("Error adding entry", {
-        position: "bottom-right",
-        autoClose: 3000,
-      });
-    }
+    submitData(data);
+    toggleModal();
   };
 
   return (
@@ -156,7 +140,7 @@ function EntryModal({ toggleModal, toast }) {
 
 EntryModal.propTypes = {
   toggleModal: propTypes.func,
-  toast: propTypes.func,
+  submitData: propTypes.func,
 };
 
 export default EntryModal;
