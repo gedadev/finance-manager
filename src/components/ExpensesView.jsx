@@ -32,13 +32,14 @@ function ExpensesView() {
         const response = await axios.get(
           `http://localhost:3000/get-expenses?initDate=${dateRange.initDate}&endDate=${dateRange.endDate}`
         );
-        const data = response.data.map((obj) => ({
+        const sortedData = response.data.sort((a, b) => b.date - a.date);
+        const data = sortedData.map((obj) => ({
           ...obj,
           date: new Date(obj.date).toLocaleDateString(),
         }));
         setExpenses(data);
       } catch (error) {
-        console.log(error);
+        toast.error("Error fetching your data");
       }
     };
     getData();
