@@ -1,11 +1,13 @@
 import { createContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 export const UserContext = createContext();
 
 const ContextProvider = ({ children }) => {
   const [userOptions, setUserOptions] = useState({});
+  const [expenses, setExpenses] = useState([]);
   const [dateRange, setDateRange] = useState({
     initDate: Date.now() - 86400000 * 35,
     endDate: Date.now(),
@@ -21,11 +23,44 @@ const ContextProvider = ({ children }) => {
         };
         setUserOptions(data);
       } catch (error) {
-        console.log(`Connection error, ${error}`);
+        toast.error("Error fetching your data", {
+          position: "bottom-right",
+          autoClose: 3000,
+        });
       }
     };
     getFilters();
   }, []);
+
+  useEffect(() => {
+    if (dateRange.initDate > dateRange.endDate) {
+      [dateRange.initDate, dateRange.endDate] = [
+        dateRange.endDate,
+        dateRange.initDate,
+      ];
+      warnInvalidDate();
+    }
+
+    const getData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/get-expenses?initDate=${dateRange.initDate}&endDate=${dateRange.endDate}`
+        );
+        const sortedData = response.data.sort((a, b) => b.date - a.date);
+        const data = sortedData.map((obj) => ({
+          ...obj,
+          date: new Date(obj.date).toLocaleDateString(),
+          price: `$${Number.parseFloat(obj.price).toFixed(2)}`,
+        }));
+        setExpenses(data);
+      } catch (error) {
+        toast.error("Error fetching your data", {
+          autoClose: 3000,
+        });
+      }
+    };
+    getData();
+  }, [dateRange]);
 
   const convertToDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -55,6 +90,12 @@ const ContextProvider = ({ children }) => {
     }
   };
 
+  const warnInvalidDate = () =>
+    toast.warn("Invalid range, dates swapped", {
+      position: "bottom-right",
+      autoClose: 3000,
+    });
+
   return (
     <UserContext.Provider
       value={{
@@ -63,9 +104,11 @@ const ContextProvider = ({ children }) => {
         userOptions,
         handleDates,
         dateRange,
+        expenses,
       }}
     >
       {children}
+      <ToastContainer />
     </UserContext.Provider>
   );
 };

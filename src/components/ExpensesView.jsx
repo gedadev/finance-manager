@@ -1,50 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ListItem from "./ListItem";
-import axios from "axios";
 import "../styles/expenses.css";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import FilterOptions from "./FilterOptions";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from "../ContextProvider";
 
 function ExpensesView() {
-  const [expenses, setExpenses] = useState([]);
   const [activeFilters, setActiveFilters] = useState(false);
   const [filters, setFilters] = useState({});
   const [filteredExpenses, setFilteredExpenses] = useState([]);
-  const [dateRange, setDateRange] = useState({
-    initDate: Date.now() - 86400000 * 35,
-    endDate: Date.now(),
-  });
-
-  useEffect(() => {
-    if (dateRange.initDate > dateRange.endDate) {
-      [dateRange.initDate, dateRange.endDate] = [
-        dateRange.endDate,
-        dateRange.initDate,
-      ];
-      warnInvalidDate();
-    }
-
-    const getData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/get-expenses?initDate=${dateRange.initDate}&endDate=${dateRange.endDate}`
-        );
-        const sortedData = response.data.sort((a, b) => b.date - a.date);
-        const data = sortedData.map((obj) => ({
-          ...obj,
-          date: new Date(obj.date).toLocaleDateString(),
-          price: `$${Number.parseFloat(obj.price).toFixed(2)}`,
-        }));
-        setExpenses(data);
-      } catch (error) {
-        toast.error("Error fetching your data");
-      }
-    };
-    getData();
-  }, [dateRange]);
+  const { expenses } = useContext(UserContext);
 
   useEffect(() => {
     const update = expenses.filter((item) =>
@@ -77,31 +44,6 @@ function ExpensesView() {
     }
   };
 
-  const handleDates = (e) => {
-    const { name, value } = e.target;
-
-    if (value) {
-      setDateRange({ ...dateRange, [name]: convertToTimestamp(value) });
-    } else {
-      setDateRange({
-        initDate: Date.now() - 86400000 * 35,
-        endDate: Date.now(),
-      });
-    }
-  };
-
-  const convertToTimestamp = (dateString) => {
-    const [year, month, day] = dateString.split("-").map(Number);
-    const date = new Date(year, month - 1, day);
-    return date.getTime();
-  };
-
-  const warnInvalidDate = () =>
-    toast.warn("Invalid range, dates swapped", {
-      position: "bottom-right",
-      autoClose: 3000,
-    });
-
   return (
     <section id="expenses" className="expenses-view">
       <div className="filters-selector">
@@ -111,7 +53,7 @@ function ExpensesView() {
         </span>
         {Object.entries(filters).length > 0 && (
           <span>
-            |{" "}
+            |
             <FilterListOffIcon
               className="filter-btn"
               onClick={() => setFilters({})}
@@ -145,11 +87,8 @@ function ExpensesView() {
           toggleFilters={toggleFilters}
           addFilter={addFilter}
           filters={{ ...filters }}
-          handleDates={handleDates}
-          dateRange={{ ...dateRange }}
         />
       )}
-      <ToastContainer />
     </section>
   );
 }
