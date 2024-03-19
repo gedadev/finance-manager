@@ -36,6 +36,7 @@ function ExpensesView() {
         const data = sortedData.map((obj) => ({
           ...obj,
           date: new Date(obj.date).toLocaleDateString(),
+          price: `$${Number.parseFloat(obj.price).toFixed(2)}`,
         }));
         setExpenses(data);
       } catch (error) {
