@@ -6,6 +6,10 @@ export const UserContext = createContext();
 
 const ContextProvider = ({ children }) => {
   const [userOptions, setUserOptions] = useState({});
+  const [dateRange, setDateRange] = useState({
+    initDate: Date.now() - 86400000 * 35,
+    endDate: Date.now(),
+  });
 
   useEffect(() => {
     const getFilters = async () => {
@@ -38,9 +42,28 @@ const ContextProvider = ({ children }) => {
     return date.getTime();
   };
 
+  const handleDates = (e) => {
+    const { name, value } = e.target;
+
+    if (value) {
+      setDateRange({ ...dateRange, [name]: convertToTimestamp(value) });
+    } else {
+      setDateRange({
+        initDate: Date.now() - 86400000 * 35,
+        endDate: Date.now(),
+      });
+    }
+  };
+
   return (
     <UserContext.Provider
-      value={{ convertToDate, convertToTimestamp, userOptions }}
+      value={{
+        convertToDate,
+        convertToTimestamp,
+        userOptions,
+        handleDates,
+        dateRange,
+      }}
     >
       {children}
     </UserContext.Provider>

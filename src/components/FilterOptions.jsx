@@ -4,14 +4,9 @@ import PropTypes from "prop-types";
 import OptionsSelector from "./OptionsSelector";
 import { UserContext } from "../ContextProvider";
 
-function FilterOptions({
-  toggleFilters,
-  addFilter,
-  filters,
-  handleDates,
-  dateRange,
-}) {
-  const { userOptions } = useContext(UserContext);
+function FilterOptions({ toggleFilters, addFilter, filters }) {
+  const { userOptions, convertToDate, handleDates, dateRange } =
+    useContext(UserContext);
   const [filtersOptions, setFiltersOptions] = useState({});
 
   useEffect(() => setFiltersOptions(userOptions), [userOptions]);
@@ -31,15 +26,6 @@ function FilterOptions({
     };
 
     addFilter(filterValues);
-  };
-
-  const convertToDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const month =
-      date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -120,8 +106,6 @@ FilterOptions.propTypes = {
   toggleFilters: PropTypes.func,
   addFilter: PropTypes.func,
   filters: PropTypes.object,
-  handleDates: PropTypes.func,
-  dateRange: PropTypes.object,
 };
 
 export default FilterOptions;
