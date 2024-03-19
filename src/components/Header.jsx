@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import EntryModal from "./EntryModal";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { UserContext } from "../ContextProvider";
 
 function Header() {
   const [activeModal, setActiveModal] = useState(false);
+  const { performUpdate } = useContext(UserContext);
 
   const toggleModal = () => setActiveModal(!activeModal);
 
@@ -21,9 +23,9 @@ function Header() {
         data
       );
       toast.success(response.data, toastProps);
+      performUpdate();
     } catch (error) {
       toast.error("Error adding entry", toastProps);
-      return false;
     }
   };
 
@@ -36,7 +38,6 @@ function Header() {
       {activeModal && (
         <EntryModal toggleModal={toggleModal} submitData={submitData} />
       )}
-      <ToastContainer />
     </header>
   );
 }

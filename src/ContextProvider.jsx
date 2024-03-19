@@ -12,6 +12,7 @@ const ContextProvider = ({ children }) => {
     initDate: Date.now() - 86400000 * 35,
     endDate: Date.now(),
   });
+  const [updateView, setUpdateView] = useState(false);
 
   useEffect(() => {
     const getFilters = async () => {
@@ -60,7 +61,9 @@ const ContextProvider = ({ children }) => {
       }
     };
     getData();
-  }, [dateRange]);
+  }, [dateRange, updateView]);
+
+  const performUpdate = () => setUpdateView(!updateView);
 
   const convertToDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -105,6 +108,7 @@ const ContextProvider = ({ children }) => {
         handleDates,
         dateRange,
         expenses,
+        performUpdate,
       }}
     >
       {children}
