@@ -11,6 +11,8 @@
 .table-container {
     margin: 0 auto;
     cursor: default;
+    overflow: auto;
+    border-radius: 0.6rem;
 }
 
 .view-table {
