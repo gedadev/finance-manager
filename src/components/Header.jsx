@@ -17,7 +17,7 @@ function Header() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/add-entrya",
+        "http://localhost:3000/add-entry",
         data
       );
       toast.success(response.data, toastProps);
