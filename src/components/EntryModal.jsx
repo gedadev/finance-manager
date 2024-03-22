@@ -4,8 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import InputSelect from "./InputSelect";
 import { UserContext } from "../ContextProvider";
 
-function EntryModal({ toggleModal, submitData }) {
-  const { convertToDate, convertToTimestamp, userOptions } =
+function EntryModal({ toggleModal }) {
+  const { convertToDate, convertToTimestamp, userOptions, submitData } =
     useContext(UserContext);
   const [inputOptions, setInputOptions] = useState({});
   const [formData, setFormData] = useState({
@@ -140,7 +140,6 @@ function EntryModal({ toggleModal, submitData }) {
 
 EntryModal.propTypes = {
   toggleModal: propTypes.func,
-  submitData: propTypes.func,
 };
 
 export default EntryModal;
