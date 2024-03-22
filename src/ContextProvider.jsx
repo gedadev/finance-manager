@@ -24,10 +24,7 @@ const ContextProvider = ({ children }) => {
         };
         setUserOptions(data);
       } catch (error) {
-        toast.error("Error fetching your data", {
-          position: "bottom-right",
-          autoClose: 3000,
-        });
+        errorMessage("Error fetching data");
       }
     };
     getFilters();
@@ -55,15 +52,38 @@ const ContextProvider = ({ children }) => {
         }));
         setExpenses(data);
       } catch (error) {
-        toast.error("Error fetching your data", {
-          autoClose: 3000,
-        });
+        errorMessage("Error fetching data");
       }
     };
     getData();
   }, [dateRange, updateView]);
 
+  const submitData = async (data) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/add-entry",
+        data
+      );
+      successMessage(response.data);
+      performUpdate();
+    } catch (error) {
+      errorMessage("Error adding entry");
+    }
+  };
+
   const performUpdate = () => setUpdateView(!updateView);
+
+  const errorMessage = (message) =>
+    toast.error(message, {
+      position: "bottom-right",
+      autoClose: 3000,
+    });
+
+  const successMessage = (message) =>
+    toast.success(message, {
+      position: "bottom-right",
+      autoClose: 3000,
+    });
 
   const convertToDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -109,6 +129,7 @@ const ContextProvider = ({ children }) => {
         dateRange,
         expenses,
         performUpdate,
+        submitData,
       }}
     >
       {children}
