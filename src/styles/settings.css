@@ -1,0 +1,64 @@
+.settings-view {
+    height: 80vh;
+    width: min(1200px, 100%);
+    margin: 3rem auto;
+    padding: 0 1rem;
+}
+
+.settings-container {
+    background: var(--light-color);
+    border-radius: 0.6rem;
+    padding: 1rem 4rem;
+}
+
+.expenses-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin: 0.5rem 0;
+}
+
+.settings-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.settings-item h4 {
+    margin: 0.5rem 0;
+}
+
+.settings-item ul {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.settings-item li {
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.settings-item li:hover {
+    transform: scale(1.1);
+}
+
+.add-icon {
+    margin: 0.5rem 0;
+}
+
+.delete-icon {
+    color: var(--warning-color);
+}
+
+.add-icon, .delete-icon {
+    cursor: pointer;
+    transition: all 5s ease;
+}
+
+.delete-icon:hover, .add-icon:hover {
+    transform: scale(1.2);
+}
+
