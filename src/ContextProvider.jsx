@@ -18,17 +18,13 @@ const ContextProvider = ({ children }) => {
     const getFilters = async () => {
       try {
         const response = await axios.get("http://localhost:3000/get-filters");
-        const data = {
-          ...response.data,
-          payMethod: response.data.payMethod.map((item) => item.name),
-        };
-        setUserOptions(data);
+        setUserOptions(response.data);
       } catch (error) {
         errorMessage("Error fetching data");
       }
     };
     getFilters();
-  }, []);
+  }, [updateView]);
 
   useEffect(() => {
     if (dateRange.initDate > dateRange.endDate) {
@@ -68,6 +64,22 @@ const ContextProvider = ({ children }) => {
       performUpdate();
     } catch (error) {
       errorMessage("Error adding entry");
+    }
+  };
+
+  const addUserOption = async (key, value) => {
+    const array = [...userOptions[key], value];
+    const body = { key, array };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/add-exp-prop",
+        body
+      );
+      successMessage(response.data);
+      performUpdate();
+    } catch (error) {
+      errorMessage("Error adding option");
     }
   };
 
@@ -130,6 +142,7 @@ const ContextProvider = ({ children }) => {
         expenses,
         performUpdate,
         submitData,
+        addUserOption,
       }}
     >
       {children}
