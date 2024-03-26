@@ -1,4 +1,4 @@
-.entry-modal {
+.entry-modal, .option-modal {
     background: var(--bg-color-transparent);
     position: absolute;
     top: 0;
@@ -32,4 +32,25 @@
 .form-buttons {
     display: flex;
     gap: 5rem;
+}
+
+.option-form {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    height: 10vh;
+    width: 600px;
+    border-radius: 0.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.new {
+    color: var(--dark-color);
+}
+
+.light-btn {
+    background: var(--light-color);
+    color: var(--dark-color);
 }
