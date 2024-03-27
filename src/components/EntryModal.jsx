@@ -38,12 +38,9 @@ function EntryModal({ toggleModal }) {
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    if (value === "add") {
-      window.location.href = "settings";
-    } else {
-      const update = { ...formData, [name]: value };
-      setFormData(update);
-    }
+
+    const update = { ...formData, [name]: value };
+    setFormData(update);
   };
 
   const handleSubmit = (e) => {
