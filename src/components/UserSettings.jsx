@@ -3,6 +3,8 @@ import { UserContext } from "../ContextProvider";
 import { useContext, useState } from "react";
 import OptionsList from "./OptionsList";
 import AddOptionModal from "./AddOptionModal";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { Link } from "react-router-dom";
 
 function UserSettings() {
   const { userOptions } = useContext(UserContext);
@@ -17,6 +19,9 @@ function UserSettings() {
   return (
     <section className="settings-view">
       <div className="settings-container">
+        <Link to="/" className="close-link">
+          <CancelIcon className="close-icon" />
+        </Link>
         <h3>Expenses Options</h3>
         <div className="expenses-options">
           <div className="settings-item">
