@@ -3,6 +3,7 @@ import propTypes from "prop-types";
 import { useContext, useEffect, useState } from "react";
 import InputSelect from "./InputSelect";
 import { UserContext } from "../ContextProvider";
+import { Link } from "react-router-dom";
 
 function EntryModal({ toggleModal }) {
   const { convertToDate, convertToTimestamp, userOptions, submitData } =
@@ -37,8 +38,12 @@ function EntryModal({ toggleModal }) {
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    const update = { ...formData, [name]: value };
-    setFormData(update);
+    if (value === "add") {
+      window.location.href = "settings";
+    } else {
+      const update = { ...formData, [name]: value };
+      setFormData(update);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -52,6 +57,8 @@ function EntryModal({ toggleModal }) {
     submitData(data);
     toggleModal();
   };
+
+  const addElement = (e) => console.log(e);
 
   return (
     <div className="entry-modal">
@@ -69,7 +76,10 @@ function EntryModal({ toggleModal }) {
         <div className="input-container">
           <label htmlFor="">Pay Method:</label>
           <select name="payMethod" onChange={handleInput}>
-            <InputSelect inputOptions={inputOptions.payMethod} />
+            <InputSelect
+              inputOptions={inputOptions.payMethod}
+              addElement={addElement}
+            />
           </select>
         </div>
         <div className="input-container">
@@ -132,6 +142,11 @@ function EntryModal({ toggleModal }) {
           <button type="button" className="button" onClick={toggleModal}>
             Discard
           </button>
+          <Link to="settings">
+            <button type="button" className="button" onClick={toggleModal}>
+              Manage
+            </button>
+          </Link>
         </div>
       </form>
     </div>
