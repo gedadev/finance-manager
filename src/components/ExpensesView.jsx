@@ -6,12 +6,14 @@ import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import FilterOptions from "./FilterOptions";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../ContextProvider";
+import EntryModal from "./EntryModal";
 
 function ExpensesView() {
   const [activeFilters, setActiveFilters] = useState(false);
   const [filters, setFilters] = useState({});
   const [filteredExpenses, setFilteredExpenses] = useState([]);
   const { expenses } = useContext(UserContext);
+  const [activeModal, setActiveModal] = useState(false);
 
   useEffect(() => {
     const update = expenses.filter((item) =>
@@ -26,9 +28,9 @@ function ExpensesView() {
     setFilteredExpenses(update);
   }, [expenses, filters]);
 
-  const toggleFilters = () => {
-    setActiveFilters(!activeFilters);
-  };
+  const toggleFilters = () => setActiveFilters(!activeFilters);
+
+  const toggleModal = () => setActiveModal(!activeModal);
 
   const addFilter = (e) => {
     const { name, value } = e.target;
@@ -76,9 +78,19 @@ function ExpensesView() {
             </ul>
           </li>
           {Object.entries(filters).length === 0
-            ? expenses.map((item) => <ListItem key={item._id} item={item} />)
+            ? expenses.map((item) => (
+                <ListItem
+                  key={item._id}
+                  item={item}
+                  toggleModal={toggleModal}
+                />
+              ))
             : filteredExpenses.map((item) => (
-                <ListItem key={item._id} item={item} />
+                <ListItem
+                  key={item._id}
+                  item={item}
+                  toggleModal={toggleModal}
+                />
               ))}
         </ul>
       </div>
@@ -89,6 +101,7 @@ function ExpensesView() {
           filters={{ ...filters }}
         />
       )}
+      {activeModal && <EntryModal toggleModal={toggleModal} action="update" />}
     </section>
   );
 }
