@@ -1,11 +1,11 @@
 import "../styles/modal.css";
-import propTypes from "prop-types";
+import PropTypes from "prop-types";
 import { useContext, useEffect, useState } from "react";
 import InputSelect from "./InputSelect";
 import { UserContext } from "../ContextProvider";
 import { Link } from "react-router-dom";
 
-function EntryModal({ toggleModal }) {
+function EntryModal({ toggleModal, action }) {
   const { convertToDate, convertToTimestamp, userOptions, submitData } =
     useContext(UserContext);
   const [inputOptions, setInputOptions] = useState({});
@@ -133,9 +133,16 @@ function EntryModal({ toggleModal }) {
           />
         </div>
         <div className="form-buttons">
-          <button type="submit" className="button" disabled={submitDisabled}>
-            Add Entry
-          </button>
+          {action === "add" && (
+            <button type="submit" className="button" disabled={submitDisabled}>
+              Add Entry
+            </button>
+          )}
+          {action === "update" && (
+            <button type="submit" className="button" disabled={submitDisabled}>
+              Update Entry
+            </button>
+          )}
           <button type="button" className="button" onClick={toggleModal}>
             Discard
           </button>
@@ -151,7 +158,8 @@ function EntryModal({ toggleModal }) {
 }
 
 EntryModal.propTypes = {
-  toggleModal: propTypes.func,
+  toggleModal: PropTypes.func,
+  action: PropTypes.string,
 };
 
 export default EntryModal;
