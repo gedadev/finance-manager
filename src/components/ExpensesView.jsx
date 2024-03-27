@@ -14,6 +14,7 @@ function ExpensesView() {
   const [filteredExpenses, setFilteredExpenses] = useState([]);
   const { expenses } = useContext(UserContext);
   const [activeModal, setActiveModal] = useState(false);
+  const [itemData, setItemData] = useState({});
 
   useEffect(() => {
     const update = expenses.filter((item) =>
@@ -30,7 +31,25 @@ function ExpensesView() {
 
   const toggleFilters = () => setActiveFilters(!activeFilters);
 
-  const toggleModal = () => setActiveModal(!activeModal);
+  const toggleModal = (item) => {
+    if (item) {
+      const data = {
+        _id: item._id,
+        formData: {
+          date: item.date,
+          payMethod: item.payMethod,
+          category: item.category,
+          subcategory: item.subcategory,
+          recurrent: item.recurrent,
+          store: item.store,
+          item: item.item,
+          price: item.price,
+        },
+      };
+      setItemData(data);
+    }
+    setActiveModal(!activeModal);
+  };
 
   const addFilter = (e) => {
     const { name, value } = e.target;
@@ -101,7 +120,9 @@ function ExpensesView() {
           filters={{ ...filters }}
         />
       )}
-      {activeModal && <EntryModal toggleModal={toggleModal} action="update" />}
+      {activeModal && (
+        <EntryModal toggleModal={toggleModal} action="update" data={itemData} />
+      )}
     </section>
   );
 }

@@ -7,7 +7,7 @@ const ListItem = ({ item, toggleModal }) => {
         {Object.entries(item).map(
           (prop) =>
             prop[0] !== "_id" && (
-              <li key={prop} onClick={toggleModal}>
+              <li key={prop} onClick={() => toggleModal(item)}>
                 {prop[1]}
               </li>
             )
