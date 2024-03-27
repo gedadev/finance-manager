@@ -5,9 +5,14 @@ import InputSelect from "./InputSelect";
 import { UserContext } from "../ContextProvider";
 import { Link } from "react-router-dom";
 
-function EntryModal({ toggleModal, action }) {
-  const { convertToDate, convertToTimestamp, userOptions, submitData } =
-    useContext(UserContext);
+function EntryModal({ toggleModal, action, data = null }) {
+  const {
+    convertToDate,
+    convertToTimestamp,
+    userOptions,
+    submitData,
+    updateData,
+  } = useContext(UserContext);
   const [inputOptions, setInputOptions] = useState({});
   const [formData, setFormData] = useState({
     date: convertToDate(Date.now()),
@@ -21,7 +26,16 @@ function EntryModal({ toggleModal, action }) {
   });
   const [submitDisabled, setSubmitDisabled] = useState(true);
 
-  useEffect(() => setInputOptions(userOptions), [userOptions]);
+  useEffect(() => {
+    if (data) {
+      const date = convertToDate(new Date(data.formData.date).getTime());
+      const price = Number(data.formData.price.slice(1));
+      const update = { ...data.formData, date, price };
+
+      setFormData(update);
+    }
+    setInputOptions(userOptions);
+  }, [userOptions, data, convertToDate]);
 
   useEffect(() => {
     const filledForm = Object.values(formData).reduce(
@@ -45,56 +59,76 @@ function EntryModal({ toggleModal, action }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = {
+    const newData = {
       ...formData,
       date: convertToTimestamp(formData.date),
       price: Number(formData.price),
     };
 
-    submitData(data);
+    switch (action) {
+      case "add":
+        submitData(newData);
+        break;
+      case "update":
+        updateData(newData, data._id);
+        break;
+      default:
+        break;
+    }
     toggleModal();
   };
-
-  const addElement = (e) => console.log(e);
 
   return (
     <div className="entry-modal">
       <form action="" className="entry-form" onSubmit={handleSubmit}>
         <div className="input-container">
-          <label htmlFor="">Date:</label>
+          <label htmlFor="modal-date">Date:</label>
           <input
             type="date"
             name="date"
-            id=""
+            id="modal-date"
             onChange={handleInput}
             value={formData.date}
           />
         </div>
         <div className="input-container">
-          <label htmlFor="">Pay Method:</label>
-          <select name="payMethod" onChange={handleInput}>
-            <InputSelect
-              inputOptions={inputOptions.payMethod}
-              addElement={addElement}
-            />
+          <label htmlFor="modal-pay">Pay Method:</label>
+          <select
+            name="payMethod"
+            id="modal-pay"
+            onChange={handleInput}
+            value={formData.payMethod}
+          >
+            <InputSelect inputOptions={inputOptions.payMethod} />
           </select>
         </div>
         <div className="input-container">
-          <label htmlFor="">Category:</label>
-          <select name="category" onChange={handleInput}>
+          <label htmlFor="modal-category">Category:</label>
+          <select
+            name="category"
+            id="modal-category"
+            onChange={handleInput}
+            value={formData.category}
+          >
             <InputSelect inputOptions={inputOptions.category} />
           </select>
         </div>
         <div className="input-container">
-          <label htmlFor="">Subcategory:</label>
-          <select name="subcategory" onChange={handleInput}>
+          <label htmlFor="modal-subcategory">Subcategory:</label>
+          <select
+            name="subcategory"
+            id="modal-subcategory"
+            onChange={handleInput}
+            value={formData.subcategory}
+          >
             <InputSelect inputOptions={inputOptions.subcategory} />
           </select>
         </div>
         <div className="input-container">
-          <label htmlFor="">Recurrent:</label>
+          <label htmlFor="modal-recurrent">Recurrent:</label>
           <select
             name="recurrent"
+            id="modal-recurrent"
             onChange={handleInput}
             value={formData.recurrent}
           >
@@ -103,31 +137,31 @@ function EntryModal({ toggleModal, action }) {
           </select>
         </div>
         <div className="input-container">
-          <label htmlFor="">Store:</label>
+          <label htmlFor="modal-store">Store:</label>
           <input
             type="text"
             name="store"
-            id=""
+            id="modal-store"
             onChange={handleInput}
             value={formData.store}
           />
         </div>
         <div className="input-container">
-          <label htmlFor="">Item:</label>
+          <label htmlFor="modal-item">Item:</label>
           <input
             type="text"
             name="item"
-            id=""
+            id="modal-item"
             onChange={handleInput}
             value={formData.item}
           />
         </div>
         <div className="input-container">
-          <label htmlFor="">Price:</label>
+          <label htmlFor="modal-price">Price:</label>
           <input
             type="number"
             name="price"
-            id=""
+            id="modal-price"
             onChange={handleInput}
             value={formData.price}
           />
@@ -160,6 +194,7 @@ function EntryModal({ toggleModal, action }) {
 EntryModal.propTypes = {
   toggleModal: PropTypes.func,
   action: PropTypes.string,
+  data: PropTypes.object,
 };
 
 export default EntryModal;
