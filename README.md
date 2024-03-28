@@ -1,8 +1,20 @@
-# React + Vite
+# Finance Manager App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This app is build for managing personal finance by keeping track of the expenses made in a timeline, classified by categories and subcategories, a pay method value, and a field to specify if is a recurrent expense
 
-Currently, two official plugins are available:
+### Tech stack for this project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- MongoDB: to store the data
+- Express: for the backend server
+- React: for the frontend app
+- Node: to run the server
+
+### Future implements
+
+This kind of applications can cover a lot more for tracking personal finance, some interesting functionalities are:
+
+- Installment payments tracker
+- Incomes tracker
+- Once having incomes and expenses tracking, a balance view can be created
+- A budget view to keep track of expenses in certain categories
+- An investments view
