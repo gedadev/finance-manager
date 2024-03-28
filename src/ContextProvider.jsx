@@ -14,11 +14,12 @@ const ContextProvider = ({ children }) => {
     endDate: Date.now(),
   });
   const [updateView, setUpdateView] = useState(false);
+  const URL = "https://successful-cummerbund-elk.cyclic.app/";
 
   useEffect(() => {
     const getFilters = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/get-filters");
+        const response = await axios.get(`${URL}/get-filters`);
         setUserOptions(response.data);
       } catch (error) {
         errorMessage("Error fetching data");
@@ -39,7 +40,7 @@ const ContextProvider = ({ children }) => {
     const getData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/get-expenses?initDate=${dateRange.initDate}&endDate=${dateRange.endDate}`
+          `${URL}/get-expenses?initDate=${dateRange.initDate}&endDate=${dateRange.endDate}`
         );
         const sortedData = response.data.sort((a, b) => b.date - a.date);
         const data = sortedData.map((obj) => ({
@@ -57,10 +58,7 @@ const ContextProvider = ({ children }) => {
 
   const submitData = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/add-entry",
-        data
-      );
+      const response = await axios.post(`${URL}/add-entry`, data);
       successMessage(response.data);
       performUpdate();
     } catch (error) {
@@ -70,7 +68,7 @@ const ContextProvider = ({ children }) => {
 
   const updateData = async (data, id) => {
     try {
-      const response = await axios.post("http://localhost:3000/update-entry", {
+      const response = await axios.post(`${URL}/update-entry`, {
         data,
         id,
       });
@@ -83,7 +81,7 @@ const ContextProvider = ({ children }) => {
 
   const deleteData = async (id) => {
     try {
-      const response = await axios.post("http://localhost:3000/delete-entry", {
+      const response = await axios.post(`${URL}/delete-entry`, {
         id,
       });
       successMessage(response.data);
@@ -98,10 +96,7 @@ const ContextProvider = ({ children }) => {
     const body = { key, array };
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/add-exp-prop",
-        body
-      );
+      const response = await axios.post(`${URL}/add-exp-prop`, body);
       successMessage(response.data);
       performUpdate();
     } catch (error) {
