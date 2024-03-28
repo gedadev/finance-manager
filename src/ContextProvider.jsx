@@ -9,7 +9,8 @@ const ContextProvider = ({ children }) => {
   const [userOptions, setUserOptions] = useState({});
   const [expenses, setExpenses] = useState([]);
   const [dateRange, setDateRange] = useState({
-    initDate: Date.now() - 86400000 * 35,
+    // initDate: Date.now() - 86400000 * 35, -> date initialized 35 days before today
+    initDate: 1709251200000, // -> date initialized on march 1st 2024 for example purposes
     endDate: Date.now(),
   });
   const [updateView, setUpdateView] = useState(false);
