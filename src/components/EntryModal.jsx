@@ -12,6 +12,7 @@ function EntryModal({ toggleModal, action, data = null }) {
     userOptions,
     submitData,
     updateData,
+    deleteData,
   } = useContext(UserContext);
   const [inputOptions, setInputOptions] = useState({});
   const [formData, setFormData] = useState({
@@ -75,6 +76,11 @@ function EntryModal({ toggleModal, action, data = null }) {
       default:
         break;
     }
+    toggleModal();
+  };
+
+  const handleDelete = () => {
+    deleteData(data._id);
     toggleModal();
   };
 
@@ -185,6 +191,15 @@ function EntryModal({ toggleModal, action, data = null }) {
               Manage
             </button>
           </Link>
+          {action === "update" && (
+            <button
+              type="button"
+              className="button delete-button"
+              onClick={handleDelete}
+            >
+              Delete Entry
+            </button>
+          )}
         </div>
       </form>
     </div>
