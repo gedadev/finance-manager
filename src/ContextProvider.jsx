@@ -67,6 +67,19 @@ const ContextProvider = ({ children }) => {
     }
   };
 
+  const updateData = async (data, id) => {
+    try {
+      const response = await axios.post("http://localhost:3000/update-entry", {
+        data,
+        id,
+      });
+      successMessage(response.data);
+      performUpdate();
+    } catch (error) {
+      errorMessage("Error updating");
+    }
+  };
+
   const addUserOption = async (key, value) => {
     const array = [...userOptions[key], value];
     const body = { key, array };
@@ -143,6 +156,7 @@ const ContextProvider = ({ children }) => {
         performUpdate,
         submitData,
         addUserOption,
+        updateData,
       }}
     >
       {children}
