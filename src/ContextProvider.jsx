@@ -80,6 +80,18 @@ const ContextProvider = ({ children }) => {
     }
   };
 
+  const deleteData = async (id) => {
+    try {
+      const response = await axios.post("http://localhost:3000/delete-entry", {
+        id,
+      });
+      successMessage(response.data);
+      performUpdate();
+    } catch (error) {
+      errorMessage("Error deleting");
+    }
+  };
+
   const addUserOption = async (key, value) => {
     const array = [...userOptions[key], value];
     const body = { key, array };
@@ -157,6 +169,7 @@ const ContextProvider = ({ children }) => {
         submitData,
         addUserOption,
         updateData,
+        deleteData,
       }}
     >
       {children}
